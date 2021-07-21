@@ -85,16 +85,26 @@
                 // ----------------------------------
 
                 // ----------- Triangle waves -----------
-                // float t = abs( frac(i.uv.x * 5) * 2 -1 );  --> manual
-                //float t = cos(i.uv.x * TAU * 2) * 0.5 + 0.5;
-                //return t;
+                //float t = abs( frac(i.uv.x * 5) * 2 -1 );  --> manual
+
+                // y --> seconds
+                //_Time.y
+
+                // ------ Example 1 ------
+                //float xOffset = cos ( i.uv.y * TAU * 8 ) * 0.05;
+                //float t = cos((i.uv.x + xOffset + _Time.y * 0.3) * TAU * 5) * 0.5 + 0.5;
+
+                float xOffset = cos(i.uv.x * TAU * 8) * 0.05;
+                float t = cos((i.uv.y + xOffset - _Time.y * 0.1) * TAU * 5) * 0.5 + 0.5;
+                t *= 1-i.uv.y;
+                return t;
                 // --------------------------------------
 
                 // lerp --> blend between 2 colors based on the X UV coords
-                float t = saturate ( InverseLerp(_ColorStart, _ColorEnd, i.uv.x) ); // saturate --> campls between 0 to 1
-                // frac = v - floor(v)
-                float4 outColor = lerp(_ColorA, _ColorB, t);
-                return outColor;
+                //float t = saturate ( InverseLerp(_ColorStart, _ColorEnd, i.uv.x) ); // saturate --> campls between 0 to 1
+                //// frac = v - floor(v)
+                //float4 outColor = lerp(_ColorA, _ColorB, t);
+                //return outColor;
 
             }
             ENDCG
