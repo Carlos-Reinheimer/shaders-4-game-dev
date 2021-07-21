@@ -9,9 +9,26 @@
         _Offset("UV Offset", Float) = 0
     }
         SubShader{
-            Tags { "RenderType" = "Opaque" }
+                // ---- Rendering order ----
+                // 1 - SkyBox
+                // 1 - Opaque
+                // 1 - Transparent
+                // 1 - Overlay
+            Tags { 
+                "RenderType" = "Transparent" // tag to inform the render pipeline of what type this is 
+                "Queue" = "Transparent" // changes the render order
+             }
 
             Pass {
+
+                //Cull Back // backface cal ling
+                //Cull Front // frontface calling
+                Cull Off // render back and front
+                ZWrite off // telling Unity to NOT write to the depth buffer
+                // ZTest // reading from the depth buffer ---- LEqual | Always | GEqual
+                Blend One One // additive
+                //Blend DstColor Zero // multiply
+
                 CGPROGRAM
                 #pragma vertex vert
                 #pragma fragment frag
@@ -97,7 +114,13 @@
                 float xOffset = cos(i.uv.x * TAU * 8) * 0.05;
                 float t = cos((i.uv.y + xOffset - _Time.y * 0.1) * TAU * 5) * 0.5 + 0.5;
                 t *= 1-i.uv.y;
-                return t;
+
+                float topBottomRemover = (abs(i.normal.y) < 0.999);
+                float waves = t * topBottomRemover;
+
+                float4 gradient = lerp(_ColorA, _ColorB, i.uv.y);
+
+                return gradient * waves;
                 // --------------------------------------
 
                 // lerp --> blend between 2 colors based on the X UV coords
