@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Vertex Offset
-  m_Shader: {fileID: 4800000, guid: e2a7bc95e50909540a303a8ab224a2ec, type: 3}
+  m_Name: Shader1 green
+  m_Shader: {fileID: 4800000, guid: 78baced03dc863a45b836dd1a60d01ee, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -18,12 +18,17 @@ Material:
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _ColorEnd: 1
-    - _ColorStart: 0
+    - _ColorEnd: 0.738
+    - _ColorStart: 0.078
     - _Offset: 0
     - _Scale: 1
     m_Colors:
-    - _ColorA: {r: 1, g: 1, b: 1, a: 1}
-    - _ColorB: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.35504556, g: 0.8207547, b: 0.32907617, a: 1}
+    - _ColorA: {r: 0.02158241, g: 0.9150943, b: 0.8598269, a: 1}
+    - _ColorB: {r: 0.45869446, g: 0.20784311, b: 0.8, a: 1}
