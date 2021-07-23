@@ -2,6 +2,7 @@
     Properties {
        [NoScaleOffset] _MainTex ("Texture", 2D) = "white" {}
         _Health ("Health", Range(0, 1)) = 1
+        _BorderSize("Border Size", Range(0, 0.5)) = 0.1
     }
     SubShader {
         Tags { "RenderType"="Transparent"
@@ -30,6 +31,7 @@
 
             sampler2D _MainTex;
             float _Health;
+            float _BorderSize;
 
             Interpolators vert (MeshData v) {
                 Interpolators o;
@@ -48,11 +50,20 @@
                 //float3 healthBarColor = lerp(float3(1, 0, 0), float3(0, 1, 0), t);
 
                 //float4 col = tex2D(_MainTex, i.uv);
-                
+
                 //clip(healthbarMask - 0.5); // make renders transparent on the black part  
                 //float bgColor = float3(0, 0, 0);
                 //float3 outColor = lerp(bgColor, healthBarColor, healthbarMask);
-                
+
+                // rounded corner clipping
+                float2 coords = i.uv;
+                coords.x *= 8;
+                float2 pointOnLineSeg = float2(clamp(coords.x, 0.5, 7.5), 0.5);
+                float sdf = distance(coords, pointOnLineSeg) * 2 - 1; // sign distance field
+                float borderSdf = sdf + _BorderSize;
+                float borderMask = step(0, -borderSdf);
+                clip(-sdf);
+
                 float healthbarMask = _Health > i.uv.x;
 
                 float3 healthBarColor = tex2D(_MainTex, float2(_Health, i.uv.y));
@@ -63,7 +74,7 @@
                 }
 
 
-                return float4(healthBarColor * healthbarMask, 1);
+                return float4(healthBarColor * healthbarMask * borderMask, 1);
                 //return col;   
             }
             ENDCG
