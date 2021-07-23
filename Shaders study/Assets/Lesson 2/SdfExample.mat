@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Healthbar
-  m_Shader: {fileID: 4800000, guid: 5749427ee5f63304e9be872889291239, type: 3}
+  m_Name: SdfExample
+  m_Shader: {fileID: 4800000, guid: de12e530407684542a3ed2bf6a7df389, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -20,9 +20,8 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: b4686665834c6544bba268cf054e7053, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - _Health: 1
+    m_Floats: []
     m_Colors: []

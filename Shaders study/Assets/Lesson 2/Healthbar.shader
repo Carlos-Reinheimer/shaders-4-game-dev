@@ -54,9 +54,16 @@
                 //float3 outColor = lerp(bgColor, healthBarColor, healthbarMask);
                 
                 float healthbarMask = _Health > i.uv.x;
+
                 float3 healthBarColor = tex2D(_MainTex, float2(_Health, i.uv.y));
-                return float4(healthBarColor * healthbarMask, 1);
                 
+                if (_Health < 0.2) {
+                    float flash = cos(_Time.y * 4) * 0.4 + 1;
+                    healthBarColor *= flash;
+                }
+
+
+                return float4(healthBarColor * healthbarMask, 1);
                 //return col;   
             }
             ENDCG
