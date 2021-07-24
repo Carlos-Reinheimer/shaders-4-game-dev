@@ -60,9 +60,12 @@
                 coords.x *= 8;
                 float2 pointOnLineSeg = float2(clamp(coords.x, 0.5, 7.5), 0.5);
                 float sdf = distance(coords, pointOnLineSeg) * 2 - 1; // sign distance field
-                float borderSdf = sdf + _BorderSize;
-                float borderMask = step(0, -borderSdf);
                 clip(-sdf);
+
+                float borderSdf = sdf + _BorderSize;
+                float pd = fwidth(borderSdf); // screen space partial derivative
+                //float borderMask = step(0, -borderSdf);
+                float borderMask = 1 - saturate(borderSdf / pd);
 
                 float healthbarMask = _Health > i.uv.x;
 
