@@ -63,7 +63,7 @@
                 clip(-sdf);
 
                 float borderSdf = sdf + _BorderSize;
-                float pd = fwidth(borderSdf); // screen space partial derivative
+                float pd = fwidth(borderSdf); // screen space partial derivative      // more accurate --> length(float2(ddx(borderSdf), ddy(borderSdf)));
                 //float borderMask = step(0, -borderSdf);
                 float borderMask = 1 - saturate(borderSdf / pd);
 
