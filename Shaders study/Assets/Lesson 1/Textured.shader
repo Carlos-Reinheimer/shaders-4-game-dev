@@ -56,7 +56,7 @@
                 fixed4 col = tex2D(_MainTex, topDownProjection);
                 fixed4 rock = tex2D(_Rock, topDownProjection);
                 float pattern = tex2D(_Pattern, i.uv).x;
-                //pattern = GetWave(pattern);
+                return GetWave(pattern);
                 //float4 finalColor = lerp(float4(1, 0, 0, 1), col, pattern);
                 float4 finalColor = lerp(rock, col, pattern);
                 return finalColor;
