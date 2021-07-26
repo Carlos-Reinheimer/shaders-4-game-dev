@@ -19,6 +19,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _DiffuseIBL:
+        m_Texture: {fileID: 2800000, guid: 946b31b0ee6280643bcc517183857e25, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -35,9 +39,15 @@ Material:
         m_Texture: {fileID: 2800000, guid: cb6e2dfd43171a442871f05bd5c813af, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SpecularIBL:
+        m_Texture: {fileID: 2800000, guid: 946b31b0ee6280643bcc517183857e25, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - _DisplacementStrength: 0.047
-    - _Gloss: 0.527
+    - _Gloss: 0.195
     - _NormalIntensity: 1
+    - _SpecIBLIntensity: 1
     m_Colors:
+    - _AmbientLight: {r: 0.081434675, g: 0.121751525, b: 0.2830189, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}

@@ -3,6 +3,7 @@
 #include "AutoLight.cginc"
 
 #define USE_LIGHTING
+#define TAU 6.28318530718;
 
 struct MeshData {
     float4 vertex : POSITION;
@@ -24,16 +25,36 @@ struct Interpolators {
 sampler2D _RockAlbedo;
 sampler2D _RockNormals;
 sampler2D _RockHeight;
+sampler2D _DiffuseIBL;
+sampler2D _SpecularIBL;
 float4 _RockAlbedo_ST;
 float _Gloss;
 float4 _Color;
+float _SpecIBLIntensity;
+float4 _AmbientLight;
 float _NormalIntensity;
 float _DisplacementStrength;
 
+float2 Rotate(float2 v, float angRad) {
+    float ca = cos(angRad);
+    float sa = sin(angRad);
+
+    return float2(ca * v.x - sa * v.y, sa * v.x + ca * v.y);
+}
+
+float2 DirToRectilinear(float3 dir) {
+    float x = atan2(dir.z, dir.x) / TAU + 0.5; // 0-1
+    float y = dir.y * 0.5 + 0.5; // 0-1
+    return float2(x, y);
+
+};
+
 Interpolators vert(MeshData v) {
     Interpolators o;
-
     o.uv = TRANSFORM_TEX(v.uv, _RockAlbedo);
+
+    //o.uv = Rotate(o.uv, _Time.y);
+
     float height = tex2Dlod(_RockHeight, float4(o.uv, 0, 0)).x * 2 - 1; // 0 - 1
     v.vertex.xyz += v.normal  * (height * _DisplacementStrength);
 
@@ -75,6 +96,16 @@ float4 frag(Interpolators i) : SV_Target{
         float3 lambert = saturate(dot(N, L));
         float3 diffuseLight = (lambert * attenuation) * _LightColor0.xyz; // or use max(0, dot(N, L))
 
+        // LEVEL 1
+        //#ifdef IS_IN_BASE_PASS
+        //    diffuseLight += _AmbientLight; // adds the indirect diffuse lighting
+        //#endif
+
+        // LEVEL 2
+        #ifdef IS_IN_BASE_PASS
+            float3 diffuseIBl = tex2D(_DiffuseIBL, DirToRectilinear(N)).xyz;
+            diffuseLight += diffuseIBl; // adds the indirect diffuse lighting
+        #endif
 
         // specular lighting
         float3 V = normalize(_WorldSpaceCameraPos - i.worldPos);
@@ -87,8 +118,17 @@ float4 frag(Interpolators i) : SV_Target{
         specularLight = pow(specularLight, specularExponent) * _Gloss * attenuation; // specular exponent 
         specularLight *= _LightColor0.xyz;
 
+        // LEVEL 3
+        #ifdef IS_IN_BASE_PASS
+            float fresnel = pow(1-saturate(dot(V, N)), 5);
+
+            float3 viewRefl = reflect(-V, N);
+            float mip = (1 - _Gloss) * 6;
+            float3 specularIbl = tex2Dlod(_SpecularIBL, float4(DirToRectilinear(viewRefl), mip, mip)).xyz;
+            specularLight += specularIbl * _SpecIBLIntensity * fresnel;
+        #endif
         //float fresnel = (1-dot(V, N))*((cos(_Time.y * 4))*0.5+0.5);
-        float fresnel = step(0.7, 1 - dot(V, N));
+        //float fresnel = step(0.7, 1 - dot(V, N));
 
         return float4(diffuseLight * surfaceColor + specularLight, 1);
     #else
