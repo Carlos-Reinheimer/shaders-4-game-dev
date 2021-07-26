@@ -51,7 +51,6 @@
                 float3 lambert = saturate(dot(N, L));
                 float3 diffuseLight = lambert * _LightColor0.xyz; // or use max(0, dot(N, L))
 
-
                 // specular lighting
                 float3 V = normalize(_WorldSpaceCameraPos - i.worldPos);
                 float3 R = reflect(-L, N);
